@@ -75,20 +75,16 @@
       font-weight: 700;
       color: #333;
     }
-    .preview { /* MODIFICADO AQUÍ */
+    .preview {
       padding: 1rem;
       border: 1px solid #ddd;
       border-radius: 8px;
       background: #f9f9f9;
-      /* overflow-x: auto; <-- Reemplazado por overflow: scroll */
       min-height: 250px;
-
-      /* --- NUEVOS ESTILOS para centrar y scroll constante --- */
       display: flex;
-      justify-content: center; /* Centra el contenido (la tabla) horizontalmente */
-      align-items: center;    /* Centra el contenido (la tabla) verticalmente */
-      overflow: scroll;       /* Muestra siempre las barras de scroll (horizontal y vertical) */
-      /* --- FIN DE NUEVOS ESTILOS --- */
+      justify-content: center;
+      align-items: center;
+      overflow: scroll;
     }
 
     button {
@@ -203,7 +199,7 @@
     footer {
       text-align: center;
       padding: 1.5rem 1rem;
-      margin-top: 13rem; /* Tu modificación de 9rem mantenida */
+      margin-top: 13rem;
       border-top: 1px solid #ddd;
       font-size: 0.875rem;
       color: #555;
@@ -407,133 +403,139 @@
 
       if (currentLogo === 'OPDN') {
         signature = `
-        <table cellpadding="0" cellspacing="0" border="0" style="background: url('public/sombra.png') no-repeat center center; background-size: 610px 280px; padding:25px;">
-          <tr>
-            <td>
-              <table cellpadding="0" cellspacing="0" border="0" style="border-radius:10px; background-color:#ffffff; box-shadow:0 4px 8px rgba(0, 0, 0, 0.1);">
-                <tr>
-                  <td style="border-radius:10px;">
-                    <table cellpadding="0" cellspacing="0" border="0" style="width:600px;">
-                      <tr>
-                        <td rowspan="2" style="width:28px; background-color:#d13339; border-top-left-radius:10px; border-bottom-left-radius:10px;"></td>
-                        <td style="width:167px; background-color:#ffffff; text-align:center; vertical-align:middle; padding-top:30px;">
-                          <img src="public/logo.png" alt="Logo OPNA" style="width:55%; height:auto;">
-                        </td>
-                        <td style="width:7px; background-color:#ffffff; text-align:center; padding-top:25px;">
-                          <div style="width:2px; height:130px; background-color:#d13339; margin:auto;"></div>
-                        </td>
-                        <td style="width:426px; background-color:#ffffff; padding:40px 10px 0 10px; vertical-align:top;border-radius: 10px">
-                          <table cellpadding="0" cellspacing="0" border="0" style="width:100%;">
-                            <tr>
-                              <td style="color:#d13339; font-size:30px; font-weight:700; line-height:32px;">${name || 'Nombre Apellido'}</td>
-                            </tr>
-                            <tr>
-                              <td style="color:#d13339; font-size:15px; font-weight:500; line-height:16px;">${position || 'Puesto / Área'}</td>
-                            </tr>
-                            <tr>
-                              <td style="padding-top:6px;">
-                                <table cellpadding="0" cellspacing="0" border="0" style="width:100%; font-size:11px; font-weight:500; color:#6e6d6c;">
-                                  <tr>
-                                    <td style="padding-bottom:12px; vertical-align:middle;">
-                                      <img src="public/correo.png" alt="Correo" style="width:10px; height:9px; vertical-align:middle; margin-right:6px;">
-                                      <a href="mailto:${email || 'correo@ejemplo.com'}" style="text-decoration:none; color:#6e6d6c;">${email || 'correo@ejemplo.com'}</a>
-                                    </td>
-                                    <td style="padding-bottom:12px; vertical-align:middle;">
-                                      <img src="public/celular.png" alt="Teléfono" style="width:10px; height:10px; vertical-align:middle; margin-right:6px;">
-                                      <a href="${telLink}" style="text-decoration:none; color:#6e6d6c;">${formattedPhone || '+506 XXXX-XXXX'}${extension ? ' ext.' + extension : ''}</a>
-                                    </td>
-                                  </tr>
-                                  <tr>
-                                    <td style="vertical-align:middle;">
-                                      <img src="public/lugar.png" alt="Ubicación" style="width:9px; height:12px; vertical-align:middle; margin-right:6px;">
-                                      ${address || 'Dirección de ejemplo'}
-                                    </td>
-                                    ${showWhatsapp ? `
-                                    <td style="vertical-align:middle;">
-                                      <img src="public/whats.png" alt="WhatsApp" style="width:10px; height:10px; vertical-align:middle; margin-right:6px;">
-                                      <a href="${waLink}" style="text-decoration:none; color:#6e6d6c;">${formattedWhatsapp || (whatsappInput && whatsappInput.placeholder ? whatsappInput.placeholder : '+506 XXXX-YYYY')}</a>
-                                    </td>` : '<td></td>'}
-                                  </tr>
+        <table cellpadding="0" cellspacing="0" border="0" style="position:relative; width:610px; height:280px;">
+            <tr>
+                <td style="position:absolute; top:0; left:0; width:100%; height:100%; z-index:0; text-align:center; vertical-align:middle;">
+                    <img src="public/sombra.png" alt="Sombra" style="width:100%; height:auto; display:block;">
+                </td>
+                <td style="position:relative; z-index:1; padding:25px;">
+                    <table cellpadding="0" cellspacing="0" border="0" style="border-radius:10px; background-color:#ffffff; box-shadow:0 4px 8px rgba(0, 0, 0, 0.1); width:100%;">
+                        <tr>
+                            <td style="border-radius:10px;">
+                                <table cellpadding="0" cellspacing="0" border="0" style="width:600px;">
+                                    <tr>
+                                        <td rowspan="2" style="width:28px; background-color:#d13339; border-top-left-radius:10px; border-bottom-left-radius:10px;"></td>
+                                        <td style="width:167px; background-color:#ffffff; text-align:center; vertical-align:middle; padding-top:30px;">
+                                            <img src="public/logo.png" alt="Logo OPNA" style="width:55%; height:auto;">
+                                        </td>
+                                        <td style="width:7px; background-color:#ffffff; text-align:center; padding-top:25px;">
+                                            <div style="width:2px; height:130px; background-color:#d13339; margin:auto;"></div>
+                                        </td>
+                                        <td style="width:426px; background-color:#ffffff; padding:40px 10px 0 10px; vertical-align:top;border-radius: 10px">
+                                            <table cellpadding="0" cellspacing="0" border="0" style="width:100%;">
+                                                <tr>
+                                                    <td style="color:#d13339; font-size:30px; font-weight:700; line-height:32px;">${name || 'Nombre Apellido'}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="color:#d13339; font-size:15px; font-weight:500; line-height:16px;">${position || 'Puesto / Área'}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="padding-top:6px;">
+                                                        <table cellpadding="0" cellspacing="0" border="0" style="width:100%; font-size:11px; font-weight:500; color:#6e6d6c;">
+                                                            <tr>
+                                                                <td style="padding-bottom:12px; vertical-align:middle;">
+                                                                    <img src="public/correo.png" alt="Correo" style="width:10px; height:9px; vertical-align:middle; margin-right:6px;">
+                                                                    <a href="mailto:${email || 'correo@ejemplo.com'}" style="text-decoration:none; color:#6e6d6c;">${email || 'correo@ejemplo.com'}</a>
+                                                                </td>
+                                                                <td style="padding-bottom:12px; vertical-align:middle;">
+                                                                    <img src="public/celular.png" alt="Teléfono" style="width:10px; height:10px; vertical-align:middle; margin-right:6px;">
+                                                                    <a href="${telLink}" style="text-decoration:none; color:#6e6d6c;">${formattedPhone || '+506 XXXX-XXXX'}${extension ? ' ext.' + extension : ''}</a>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td style="vertical-align:middle;">
+                                                                    <img src="public/lugar.png" alt="Ubicación" style="width:9px; height:12px; vertical-align:middle; margin-right:6px;">
+                                                                    ${address || 'Dirección de ejemplo'}
+                                                                </td>
+                                                                ${showWhatsapp ? `
+                                                                <td style="vertical-align:middle;">
+                                                                    <img src="public/whats.png" alt="WhatsApp" style="width:10px; height:10px; vertical-align:middle; margin-right:6px;">
+                                                                    <a href="${waLink}" style="text-decoration:none; color:#6e6d6c;">${formattedWhatsapp || (whatsappInput && whatsappInput.placeholder ? whatsappInput.placeholder : '+506 XXXX-YYYY')}</a>
+                                                                </td>` : '<td></td>'}
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" style="background-color:#ffffff;"></td>
+                                        <td style="background-color:#ffffff; text-align:right; padding:1px 10px 4px 10px;border-radius: 10px">
+                                            <img src="public/casas.png" alt="Casas" style="max-width:300px; height:auto;">
+                                        </td>
+                                    </tr>
                                 </table>
-                              </td>
-                            </tr>
-                          </table>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td colspan="2" style="background-color:#ffffff;"></td>
-                        <td style="background-color:#ffffff; text-align:right; padding:1px 10px 4px 10px;border-radius: 10px">
-                          <img src="public/casas.png" alt="Casas" style="max-width:300px; height:auto;">
-                        </td>
-                      </tr>
+                            </td>
+                        </tr>
                     </table>
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
+                </td>
+            </tr>
         </table>`;
       } else if (currentLogo === 'ONE') {
         signature = `
-        <table cellpadding="0" cellspacing="0" border="0" style="background: url('public/sombra.png') no-repeat center center; background-size: 610px 280px; padding:25px;">
-          <tr>
-            <td>
-              <table cellpadding="0" cellspacing="0" border="0" style="border-radius:10px; background-color:#ffffff; box-shadow:0 4px 8px rgba(0, 0, 0, 0.1); height:192px;">
-                <tr>
-                  <td style="border-radius:10px;">
-                    <table cellpadding="0" cellspacing="0" border="0" style="width:600px; height:192px;">
-                      <tr>
-                        <td style="width:28px; background-color:#d13339; border-top-left-radius:10px; border-bottom-left-radius:10px;"></td>
-                        <td style="width:167px; background-color:#ffffff; text-align:center; vertical-align:middle;">
-                          <img src="public/logoas.png" alt="Logo OPNA" style="width:50%; height:auto;vertical-align:middle;">
-                        </td>
-                        <td style="width:7px; background-color:#ffffff; text-align:center; vertical-align:middle;">
-                          <div style="width:2px; height:130px; background-color:#d13339; margin:auto;"></div>
-                        </td>
-                        <td style="width:426px; background-color:#ffffff; padding:0 10px; vertical-align:middle; border-radius: 15px;">
-                          <table cellpadding="0" cellspacing="0" border="0" style="width:100%;">
-                            <tr>
-                              <td style="color:#d13339; font-size:30px; font-weight:700; line-height:32px;">${name || 'Nombre Apellido'}</td>
-                            </tr>
-                            <tr>
-                              <td style="color:#d13339; font-size:15px; font-weight:500; line-height:16px;">${position || 'Puesto / Área'}</td>
-                            </tr>
-                            <tr>
-                              <td style="padding-top:6px;">
-                                <table cellpadding="0" cellspacing="0" border="0" style="width:100%; font-size:12px; font-weight:500; color:#6e6d6c;">
-                                  <tr>
-                                    <td style="padding-bottom:12px; vertical-align:middle;">
-                                      <img src="public/correo.png" alt="Correo" style="width:11px; height:10px; vertical-align:middle; margin-right:6px;">
-                                      <a href="mailto:${email || 'correo@ejemplo.com'}" style="text-decoration:none; color:#6e6d6c;">${email || 'correo@ejemplo.com'}</a>
-                                    </td>
-                                    <td style="padding-bottom:12px; vertical-align:middle;">
-                                      <img src="public/celular.png" alt="Teléfono" style="width:10px; height:10px; vertical-align:middle; margin-right:6px;">
-                                      <a href="${telLink}" style="text-decoration:none; color:#6e6d6c;">${formattedPhone || '+506 XXXX-XXXX'}${extension ? ' ext.' + extension : ''}</a>
-                                    </td>
-                                  </tr>
-                                  <tr>
-                                    <td style="vertical-align:middle;">
-                                      <img src="public/lugar.png" alt="Ubicación" style="width:10px; height:10px; vertical-align:middle; margin-right:6px;">
-                                      ${address || 'Dirección de ejemplo'}
-                                    </td>
-                                    ${showWhatsapp ? `
-                                    <td style="vertical-align:middle;">
-                                      <img src="public/whats.png" alt="WhatsApp" style="width:10px; height:10px; vertical-align:middle; margin-right:6px;">
-                                      <a href="${waLink}" style="text-decoration:none; color:#6e6d6c;">${formattedWhatsapp || (whatsappInput && whatsappInput.placeholder ? whatsappInput.placeholder : '+506 XXXX-YYYY')}</a>
-                                    </td>` : '<td></td>'}
-                                  </tr>
+        <table cellpadding="0" cellspacing="0" border="0" style="position:relative; width:610px; height:280px;">
+            <tr>
+                <td style="position:absolute; top:0; left:0; width:100%; height:100%; z-index:0; text-align:center; vertical-align:middle;">
+                    <img src="public/sombra.png" alt="Sombra" style="width:100%; height:auto; display:block;">
+                </td>
+                <td style="position:relative; z-index:1; padding:25px;">
+                    <table cellpadding="0" cellspacing="0" border="0" style="border-radius:10px; background-color:#ffffff; box-shadow:0 4px 8px rgba(0, 0, 0, 0.1); height:192px; width:100%;">
+                        <tr>
+                            <td style="border-radius:10px;">
+                                <table cellpadding="0" cellspacing="0" border="0" style="width:600px; height:192px;">
+                                    <tr>
+                                        <td style="width:28px; background-color:#d13339; border-top-left-radius:10px; border-bottom-left-radius:10px;"></td>
+                                        <td style="width:167px; background-color:#ffffff; text-align:center; vertical-align:middle;">
+                                            <img src="public/logoas.png" alt="Logo OPNA" style="width:50%; height:auto;vertical-align:middle;">
+                                        </td>
+                                        <td style="width:7px; background-color:#ffffff; text-align:center; vertical-align:middle;">
+                                            <div style="width:2px; height:130px; background-color:#d13339; margin:auto;"></div>
+                                        </td>
+                                        <td style="width:426px; background-color:#ffffff; padding:0 10px; vertical-align:middle; border-radius: 15px;">
+                                            <table cellpadding="0" cellspacing="0" border="0" style="width:100%;">
+                                                <tr>
+                                                    <td style="color:#d13339; font-size:30px; font-weight:700; line-height:32px;">${name || 'Nombre Apellido'}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="color:#d13339; font-size:15px; font-weight:500; line-height:16px;">${position || 'Puesto / Área'}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="padding-top:6px;">
+                                                        <table cellpadding="0" cellspacing="0" border="0" style="width:100%; font-size:12px; font-weight:500; color:#6e6d6c;">
+                                                            <tr>
+                                                                <td style="padding-bottom:12px; vertical-align:middle;">
+                                                                    <img src="public/correo.png" alt="Correo" style="width:11px; height:10px; vertical-align:middle; margin-right:6px;">
+                                                                    <a href="mailto:${email || 'correo@ejemplo.com'}" style="text-decoration:none; color:#6e6d6c;">${email || 'correo@ejemplo.com'}</a>
+                                                                </td>
+                                                                <td style="padding-bottom:12px; vertical-align:middle;">
+                                                                    <img src="public/celular.png" alt="Teléfono" style="width:10px; height:10px; vertical-align:middle; margin-right:6px;">
+                                                                    <a href="${telLink}" style="text-decoration:none; color:#6e6d6c;">${formattedPhone || '+506 XXXX-XXXX'}${extension ? ' ext.' + extension : ''}</a>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td style="vertical-align:middle;">
+                                                                    <img src="public/lugar.png" alt="Ubicación" style="width:10px; height:10px; vertical-align:middle; margin-right:6px;">
+                                                                    ${address || 'Dirección de ejemplo'}
+                                                                </td>
+                                                                ${showWhatsapp ? `
+                                                                <td style="vertical-align:middle;">
+                                                                    <img src="public/whats.png" alt="WhatsApp" style="width:10px; height:10px; vertical-align:middle; margin-right:6px;">
+                                                                    <a href="${waLink}" style="text-decoration:none; color:#6e6d6c;">${formattedWhatsapp || (whatsappInput && whatsappInput.placeholder ? whatsappInput.placeholder : '+506 XXXX-YYYY')}</a>
+                                                                </td>` : '<td></td>'}
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
                                 </table>
-                              </td>
-                            </tr>
-                          </table>
-                        </td>
-                      </tr>
+                            </td>
+                        </tr>
                     </table>
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
+                </td>
+            </tr>
         </table>`;
       }
 
