@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Editor de Firma OPDN</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Montserrat', sans-serif;
+      margin: 0;
+      padding: 2rem;
+      background: #f7f7f8;
+      color: #333;
+    }
+    .container {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 2rem;
+      max-width: 1300px;
+      margin: auto;
+    }
+    .form-section {
+      flex: 0.85;
+      min-width: 300px;
+      background: white;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    }
+    .preview-section {
+      flex: 1.59;
+      min-width: 300px;
+      background: white;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    }
+    label {
+      display: block;
+      margin-top: 1rem;
+      font-weight: 600;
+    }
+    input[type="text"], input[type="email"], select {
+      width: 100%;
+      padding: 0.5rem;
+      margin-top: 0.25rem;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      font-family: 'Montserrat', sans-serif;
+      box-sizing: border-box;
+      background-color: white;
+    }
+    .input-row select, .input-row input {
+        flex: 1;
+    }
+    .custom-input-field {
+        margin-top: 0.5rem;
+    }
+
+    input[type="text"]:focus, input[type="email"]:focus, select:focus {
+      border-color: #d13339;
+      box-shadow: 0 0 0 3px rgba(209, 51, 57, 0.15);
+      outline: none;
+    }
+    input[type="text"]:focus::placeholder, input[type="email"]:focus::placeholder {
+      color: transparent;
+    }
+    input[type="text"]::placeholder, input[type="email"]::placeholder {
+      color: #ccc;
+    }
+    h2 {
+      margin-top: 0;
+      font-weight: 700;
+      color: #333;
+    }
+    .preview { /* MODIFICADO AQUÍ */
+      padding: 1rem;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background: #f9f9f9;
+      /* overflow-x: auto; <-- Reemplazado por overflow: scroll */
+      min-height: 250px;
+
+      /* --- NUEVOS ESTILOS para centrar y scroll constante --- */
+      display: flex;
+      justify-content: center; /* Centra el contenido (la tabla) horizontalmente */
+      align-items: center;    /* Centra el contenido (la tabla) verticalmente */
+      overflow: scroll;       /* Muestra siempre las barras de scroll (horizontal y vertical) */
+      /* --- FIN DE NUEVOS ESTILOS --- */
+    }
+
+    button {
+      border: none;
+      padding: 0.7rem 1.3rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 600;
+      transition: background-color 0.25s ease, color 0.25s ease, transform 0.15s ease, box-shadow 0.25s ease;
+      outline: none;
+      position: relative;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    button:not(.button-toggle) {
+      background-color: #d13339;
+      color: white;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    button:not(.button-toggle):hover {
+      background-color: #b92b30;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+    button:not(.button-toggle):active {
+      transform: translateY(0px) scale(0.97);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    }
+
+    .button-toggle {
+      background-color: #e9e9f0;
+      color: #555;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    .button-toggle:hover:not(.active) {
+      background-color: #dcdce3;
+      color: #333;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    .button-toggle:active:not(.active) {
+      transform: translateY(0px) scale(0.97);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    }
+    .button-toggle.active {
+      background-color: #d13339;
+      color: white;
+      box-shadow: 0 2px 6px rgba(209, 51, 57, 0.3);
+      transform: translateY(0);
+    }
+     .button-toggle.active:hover {
+       background-color: #c12f35;
+       box-shadow: 0 3px 7px rgba(209, 51, 57, 0.35);
+    }
+
+    .input-row {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+    .input-column {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    #signature-html {
+      width: 100%;
+      height: 200px;
+      margin-top: 1rem;
+      font-family: monospace;
+      white-space: pre-wrap;
+      background: #f0f0f0;
+      padding: 1rem;
+      border-radius: 8px;
+      overflow-y: auto;
+      display: none;
+    }
+    .button-group {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+      flex-wrap: wrap;
+    }
+    .required {
+      color: #d13339;
+      font-size: 12px;
+      margin-top: 0.25rem;
+      display: none;
+    }
+    #copy-message {
+      padding: 0.75rem;
+      border-radius: 8px;
+      margin-top: 1rem;
+      font-weight: 500;
+      display: none;
+      text-align: center;
+      border: 1px solid transparent;
+    }
+    #copy-message.success {
+      background-color: #e6f7e9;
+      color: #28a745;
+      border-color: #a3d8b0;
+    }
+    #copy-message.error {
+      background-color: #f8d7da;
+      color: #721c24;
+      border-color: #f5c6cb;
+    }
+
+    footer {
+      text-align: center;
+      padding: 1.5rem 1rem;
+      margin-top: 13rem; /* Tu modificación de 9rem mantenida */
+      border-top: 1px solid #ddd;
+      font-size: 0.875rem;
+      color: #555;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    footer p {
+      margin: 0.4rem 0;
+    }
+    footer a {
+      color: #d13339;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="form-section">
+      <h2>Editar Firma</h2>
+      <label for="name">Nombre</label>
+      <input type="text" id="name" placeholder="Nombre y Apellido" oninput="updateSignature()">
+      <div class="required" id="name-required">Este campo es requerido</div>
+
+      <label for="position">Puesto / Área</label>
+      <input type="text" id="position" placeholder="Puesto de Trabajo" oninput="updateSignature()">
+      <div class="required" id="position-required">Este campo es requerido</div>
+
+      <label for="email">Correo institucional</label>
+      <input type="email" id="email" placeholder="contacto@cedesdonbosco.ed.cr" oninput="updateSignature()">
+      <div class="required" id="email-required">Este campo es requerido</div>
+
+      <label for="phone">Teléfono</label>
+      <div class="input-row">
+        <div class="input-column">
+          <select id="phone" onchange="toggleCustomInput('phone', 'phone-custom-wrapper'); updateSignature();">
+            <option value="41070700" selected>4107-0700</option>
+            <option value="custom">Otro...</option>
+          </select>
+          <div id="phone-custom-wrapper" style="display: none;" class="custom-input-field">
+            <input type="text" id="phone-custom" placeholder="Teléfono personalizado (ej: 1234-5678)" oninput="formatPhone('phone-custom'); updateSignature();">
+            <div class="required" id="phone-custom-required">Teléfono personalizado es requerido</div>
+          </div>
+        </div>
+        <input type="text" id="extension" placeholder="Ext." oninput="updateSignature()" style="flex: 0.5;">
+      </div>
+      <div class="required" id="phone-required">Este campo es requerido (Teléfono principal)</div>
+
+
+      <label>
+        <input type="checkbox" id="show-whatsapp" checked onchange="toggleWhatsapp(); updateSignature();">
+        Incluir WhatsApp
+      </label>
+
+      <div id="whatsapp-field">
+        <label for="whatsapp">WhatsApp</label>
+        <input type="text" id="whatsapp" placeholder="XXXX-XXXX" oninput="formatPhone('whatsapp'); updateSignature()">
+      </div>
+
+      <label for="address">Dirección</label>
+      <select id="address" onchange="toggleCustomInput('address', 'address-custom-wrapper'); updateSignature();">
+        <option value="Barrio Don Bosco, Av. 4, Calles 26-28" selected>Barrio Don Bosco, Av. 4, Calles 26-28</option>
+        <option value="San José, Costa Rica">San José, Costa Rica</option>
+        <option value="custom">Otra...</option>
+      </select>
+      <div id="address-custom-wrapper" style="display: none;" class="custom-input-field">
+        <input type="text" id="address-custom" placeholder="Dirección personalizada" oninput="updateSignature()">
+        <div class="required" id="address-custom-required">Dirección personalizada es requerida</div>
+      </div>
+      <div class="required" id="address-required">Este campo es requerido</div>
+
+      <div class="button-group">
+        <button onclick="copySignature()">Copiar Firma</button>
+        <button class="button-toggle active" onclick="setLogo('OPDN', this)">OPDN</button>
+        <button class="button-toggle" onclick="setLogo('ONE', this)">ONE</button>
+      </div>
+
+      <div id="copy-message"></div>
+
+      <pre id="signature-html"></pre>
+    </div>
+    <div class="preview-section">
+      <h2>Vista Previa</h2>
+      <div id="signature-preview" class="preview"></div>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 OPDN. Todos los derechos reservados.</p>
+    <p>Created by: <a href="https://linktr.ee/koicr" id="koi-link">KOI</a></p>
+  </footer>
+  <script>
+    let currentLogo = 'OPDN';
+
+    function formatPhone(id) {
+      const input = document.getElementById(id);
+      if (!input) return;
+      let value = input.value.replace(/\D/g, '');
+      if (id === 'phone-custom') {
+        if (value.length > 8) value = value.slice(0, 8);
+        if (value.length > 4) {
+            value = value.slice(0, 4) + '-' + value.slice(4);
+        }
+      } else if (id === 'whatsapp') {
+        if (value.length > 8) value = value.slice(0, 8);
+        if (value.length > 4) {
+            value = value.slice(0, 4) + '-' + value.slice(4);
+        }
+      }
+      input.value = value;
+    }
+
+    function toggleWhatsapp() {
+      const isChecked = document.getElementById('show-whatsapp').checked;
+      const field = document.getElementById('whatsapp-field');
+      field.style.display = isChecked ? 'block' : 'none';
+      if (isChecked) {
+          formatPhone('whatsapp');
+      }
+      updateSignature();
+    }
+
+    function toggleCustomInput(selectId, customInputWrapperId) {
+      const selectElement = document.getElementById(selectId);
+      const customInputWrapper = document.getElementById(customInputWrapperId);
+      const customInputElement = customInputWrapper.querySelector('input[type="text"]');
+
+      if (selectElement.value === 'custom') {
+        customInputWrapper.style.display = 'block';
+      } else {
+        customInputWrapper.style.display = 'none';
+        if (customInputElement) customInputElement.value = '';
+      }
+
+      const customErrorElement = document.getElementById(selectId + '-custom-required');
+      if (customErrorElement && customInputWrapper.style.display === 'none') {
+          customErrorElement.style.display = 'none';
+      }
+      updateSignature();
+    }
+
+
+    function setLogo(option, btn) {
+      currentLogo = option;
+      document.querySelectorAll('.button-toggle').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      updateSignature();
+    }
+
+    function getPhoneValue() {
+        const phoneSelect = document.getElementById('phone');
+        let phoneValue = phoneSelect.value;
+        if (phoneValue === 'custom') {
+            phoneValue = document.getElementById('phone-custom').value.replace(/-/g, '').trim();
+        }
+        return phoneValue;
+    }
+
+    function getAddressValue() {
+        const addressSelect = document.getElementById('address');
+        let addressValue = addressSelect.value;
+        if (addressValue === 'custom') {
+            addressValue = document.getElementById('address-custom').value.trim();
+        }
+        return addressValue;
+    }
+
+
+    function updateSignature() {
+      const name = document.getElementById('name').value.trim();
+      const position = document.getElementById('position').value.trim();
+      const email = document.getElementById('email').value.trim();
+
+      const phone = getPhoneValue();
+      const extension = document.getElementById('extension').value.trim();
+      const whatsappInput = document.getElementById('whatsapp');
+      const whatsapp = whatsappInput ? whatsappInput.value.trim() : '';
+
+      const address = getAddressValue();
+
+      const showWhatsapp = document.getElementById('show-whatsapp').checked;
+
+      let displayPhone = phone;
+      if (phone && phone.length === 8 && !phone.includes('-')) {
+          displayPhone = phone.slice(0,4) + '-' + phone.slice(4);
+      } else if (phone && phone.includes('-')) {
+          displayPhone = phone;
+      }
+
+
+      const formattedPhone = displayPhone ? `+506 ${displayPhone}` : '';
+      const formattedWhatsapp = whatsapp ? `+506 ${whatsapp}` : '';
+
+      const telLink = phone ? `tel:+506${phone.replace(/-/g, '')}${extension ? ',' + extension : ''}` : '#';
+      const waLink = (showWhatsapp && whatsapp) ? `https://wa.me/506${whatsapp.replace(/-/g, '')}` : '#';
+
+      let signature = '';
+
+      if (currentLogo === 'OPDN') {
+        signature = `
+        <table cellpadding="0" cellspacing="0" border="0" style="background: url('public/sombra.png') no-repeat center center; background-size: 610px 280px; padding:25px;">
+          <tr>
+            <td>
+              <table cellpadding="0" cellspacing="0" border="0" style="border-radius:10px; background-color:#ffffff; box-shadow:0 4px 8px rgba(0, 0, 0, 0.1);">
+                <tr>
+                  <td style="border-radius:10px;">
+                    <table cellpadding="0" cellspacing="0" border="0" style="width:600px;">
+                      <tr>
+                        <td rowspan="2" style="width:28px; background-color:#d13339; border-top-left-radius:10px; border-bottom-left-radius:10px;"></td>
+                        <td style="width:167px; background-color:#ffffff; text-align:center; vertical-align:middle; padding-top:30px;">
+                          <img src="public/logo.png" alt="Logo OPNA" style="width:55%; height:auto;">
+                        </td>
+                        <td style="width:7px; background-color:#ffffff; text-align:center; padding-top:25px;">
+                          <div style="width:2px; height:130px; background-color:#d13339; margin:auto;"></div>
+                        </td>
+                        <td style="width:426px; background-color:#ffffff; padding:40px 10px 0 10px; vertical-align:top;border-radius: 10px">
+                          <table cellpadding="0" cellspacing="0" border="0" style="width:100%;">
+                            <tr>
+                              <td style="color:#d13339; font-size:30px; font-weight:700; line-height:32px;">${name || 'Nombre Apellido'}</td>
+                            </tr>
+                            <tr>
+                              <td style="color:#d13339; font-size:15px; font-weight:500; line-height:16px;">${position || 'Puesto / Área'}</td>
+                            </tr>
+                            <tr>
+                              <td style="padding-top:6px;">
+                                <table cellpadding="0" cellspacing="0" border="0" style="width:100%; font-size:11px; font-weight:500; color:#6e6d6c;">
+                                  <tr>
+                                    <td style="padding-bottom:12px; vertical-align:middle;">
+                                      <img src="public/correo.png" alt="Correo" style="width:10px; height:9px; vertical-align:middle; margin-right:6px;">
+                                      <a href="mailto:${email || 'correo@ejemplo.com'}" style="text-decoration:none; color:#6e6d6c;">${email || 'correo@ejemplo.com'}</a>
+                                    </td>
+                                    <td style="padding-bottom:12px; vertical-align:middle;">
+                                      <img src="public/celular.svg" alt="Teléfono" style="width:10px; height:10px; vertical-align:middle; margin-right:6px;">
+                                      <a href="${telLink}" style="text-decoration:none; color:#6e6d6c;">${formattedPhone || '+506 XXXX-XXXX'}${extension ? ' ext.' + extension : ''}</a>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td style="vertical-align:middle;">
+                                      <img src="public/lugar.png" alt="Ubicación" style="width:9px; height:12px; vertical-align:middle; margin-right:6px;">
+                                      ${address || 'Dirección de ejemplo'}
+                                    </td>
+                                    ${showWhatsapp ? `
+                                    <td style="vertical-align:middle;">
+                                      <img src="public/whats.png" alt="WhatsApp" style="width:10px; height:10px; vertical-align:middle; margin-right:6px;">
+                                      <a href="${waLink}" style="text-decoration:none; color:#6e6d6c;">${formattedWhatsapp || (whatsappInput && whatsappInput.placeholder ? whatsappInput.placeholder : '+506 XXXX-YYYY')}</a>
+                                    </td>` : '<td></td>'}
+                                  </tr>
+                                </table>
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td colspan="2" style="background-color:#ffffff;"></td>
+                        <td style="background-color:#ffffff; text-align:right; padding:1px 10px 4px 10px;border-radius: 10px">
+                          <img src="public/casas.png" alt="Casas" style="max-width:300px; height:auto;">
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>`;
+      } else if (currentLogo === 'ONE') {
+        signature = `
+        <table cellpadding="0" cellspacing="0" border="0" style="background: url('public/sombra.png') no-repeat center center; background-size: 610px 280px; padding:25px;">
+          <tr>
+            <td>
+              <table cellpadding="0" cellspacing="0" border="0" style="border-radius:10px; background-color:#ffffff; box-shadow:0 4px 8px rgba(0, 0, 0, 0.1); height:192px;">
+                <tr>
+                  <td style="border-radius:10px;">
+                    <table cellpadding="0" cellspacing="0" border="0" style="width:600px; height:192px;">
+                      <tr>
+                        <td style="width:28px; background-color:#d13339; border-top-left-radius:10px; border-bottom-left-radius:10px;"></td>
+                        <td style="width:167px; background-color:#ffffff; text-align:center; vertical-align:middle;">
+                          <img src="public/logoas.png" alt="Logo OPNA" style="width:50%; height:auto;vertical-align:middle;">
+                        </td>
+                        <td style="width:7px; background-color:#ffffff; text-align:center; vertical-align:middle;">
+                          <div style="width:2px; height:130px; background-color:#d13339; margin:auto;"></div>
+                        </td>
+                        <td style="width:426px; background-color:#ffffff; padding:0 10px; vertical-align:middle; border-radius: 15px;">
+                          <table cellpadding="0" cellspacing="0" border="0" style="width:100%;">
+                            <tr>
+                              <td style="color:#d13339; font-size:30px; font-weight:700; line-height:32px;">${name || 'Nombre Apellido'}</td>
+                            </tr>
+                            <tr>
+                              <td style="color:#d13339; font-size:15px; font-weight:500; line-height:16px;">${position || 'Puesto / Área'}</td>
+                            </tr>
+                            <tr>
+                              <td style="padding-top:6px;">
+                                <table cellpadding="0" cellspacing="0" border="0" style="width:100%; font-size:12px; font-weight:500; color:#6e6d6c;">
+                                  <tr>
+                                    <td style="padding-bottom:12px; vertical-align:middle;">
+                                      <img src="public/correo.png" alt="Correo" style="width:11px; height:10px; vertical-align:middle; margin-right:6px;">
+                                      <a href="mailto:${email || 'correo@ejemplo.com'}" style="text-decoration:none; color:#6e6d6c;">${email || 'correo@ejemplo.com'}</a>
+                                    </td>
+                                    <td style="padding-bottom:12px; vertical-align:middle;">
+                                      <img src="public/celular.png" alt="Teléfono" style="width:10px; height:10px; vertical-align:middle; margin-right:6px;">
+                                      <a href="${telLink}" style="text-decoration:none; color:#6e6d6c;">${formattedPhone || '+506 XXXX-XXXX'}${extension ? ' ext.' + extension : ''}</a>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td style="vertical-align:middle;">
+                                      <img src="public/lugar.png" alt="Ubicación" style="width:10px; height:10px; vertical-align:middle; margin-right:6px;">
+                                      ${address || 'Dirección de ejemplo'}
+                                    </td>
+                                    ${showWhatsapp ? `
+                                    <td style="vertical-align:middle;">
+                                      <img src="public/whats.png" alt="WhatsApp" style="width:10px; height:10px; vertical-align:middle; margin-right:6px;">
+                                      <a href="${waLink}" style="text-decoration:none; color:#6e6d6c;">${formattedWhatsapp || (whatsappInput && whatsappInput.placeholder ? whatsappInput.placeholder : '+506 XXXX-YYYY')}</a>
+                                    </td>` : '<td></td>'}
+                                  </tr>
+                                </table>
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>`;
+      }
+
+      document.getElementById('signature-preview').innerHTML = signature;
+      document.getElementById('signature-html').textContent = signature.trim();
+    }
+
+    async function copySignature() {
+      const name = document.getElementById('name').value.trim();
+      const position = document.getElementById('position').value.trim();
+      const email = document.getElementById('email').value.trim();
+
+      const phoneSelect = document.getElementById('phone');
+      const phoneCustomInput = document.getElementById('phone-custom');
+      const phoneValue = getPhoneValue();
+
+      const addressSelect = document.getElementById('address');
+      const addressCustomInput = document.getElementById('address-custom');
+      const addressValue = getAddressValue();
+
+      const messageElement = document.getElementById('copy-message');
+      messageElement.style.display = 'none';
+      messageElement.textContent = '';
+      messageElement.className = '';
+
+      let missingField = false;
+
+      function checkRequired(inputId, errorId, isCustomSelect = false, customInputId = '', customErrorId = '') {
+        const inputElement = document.getElementById(inputId);
+        const errorElement = document.getElementById(errorId);
+
+        if (isCustomSelect) {
+            const selectValue = inputElement.value;
+            const customInputElement = document.getElementById(customInputId);
+            const customErrorElement = document.getElementById(customErrorId);
+
+            if(errorElement) errorElement.style.display = 'none';
+
+            if (selectValue === 'custom') {
+                if (!customInputElement.value || customInputElement.value.trim() === "") {
+                    if(customErrorElement) customErrorElement.style.display = 'block';
+                    if(errorElement) errorElement.style.display = 'none';
+                    return true;
+                } else {
+                    if(customErrorElement) customErrorElement.style.display = 'none';
+                    return false;
+                }
+            } else if (!selectValue || selectValue.trim() === "") {
+                 if(errorElement) errorElement.style.display = 'block';
+                 if(customErrorElement) customErrorElement.style.display = 'none';
+                 return true;
+            } else {
+                 if(errorElement) errorElement.style.display = 'none';
+                 if(customErrorElement) customErrorElement.style.display = 'none';
+                 return false;
+            }
+        } else {
+            if (!inputElement.value || inputElement.value.trim() === "") {
+                errorElement.style.display = 'block';
+                return true;
+            }
+            errorElement.style.display = 'none';
+            return false;
+        }
+      }
+
+      if (checkRequired('name', 'name-required')) missingField = true;
+      if (checkRequired('position', 'position-required')) missingField = true;
+      if (checkRequired('email', 'email-required')) missingField = true;
+
+      if (checkRequired('phone', 'phone-required', true, 'phone-custom', 'phone-custom-required')) missingField = true;
+      if (checkRequired('address', 'address-required', true, 'address-custom', 'address-custom-required')) missingField = true;
+
+
+      if (missingField) {
+        messageElement.textContent = 'Por favor, complete todos los campos requeridos resaltados.';
+        messageElement.classList.add('error');
+        messageElement.style.display = 'block';
+        return;
+      }
+
+      const signaturePreview = document.getElementById('signature-preview');
+      if (!signaturePreview.innerHTML.trim()) {
+          messageElement.textContent = 'No hay firma generada para copiar.';
+          messageElement.classList.add('error');
+          messageElement.style.display = 'block';
+          setTimeout(() => { messageElement.style.display = 'none'; }, 5000);
+          return;
+      }
+
+      try {
+        const signatureHtml = signaturePreview.innerHTML;
+        const blob = new Blob([signatureHtml], { type: 'text/html' });
+        const clipboardItem = new ClipboardItem({ 'text/html': blob });
+        await navigator.clipboard.write([clipboardItem]);
+
+        messageElement.textContent = '¡Firma copiada al portapapeles!';
+        messageElement.classList.add('success');
+      } catch (err) {
+        console.error('Error al copiar la firma:', err);
+        messageElement.textContent = 'Error al copiar la firma. Asegúrate de que el sitio esté en HTTPS. Si el problema persiste, intenta seleccionar y copiar manualmente desde la vista previa.';
+        messageElement.classList.add('error');
+
+        try {
+            const range = document.createRange();
+            range.selectNodeContents(signaturePreview);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            const successful = document.execCommand('copy');
+            if (successful) {
+                messageElement.textContent = '¡Firma copiada al portapapeles (método alternativo)!';
+                messageElement.classList.add('success');
+            } else {
+                messageElement.textContent = 'No se pudo copiar la firma. Intenta seleccionar y copiar manualmente desde la vista previa.';
+                messageElement.classList.add('error');
+            }
+            selection.removeAllRanges();
+        } catch (execErr) {
+            console.error('Error en el fallback de execCommand:', execErr);
+            messageElement.textContent = 'Error al copiar la firma. Intenta seleccionar y copiar manualmente desde la vista previa.';
+            messageElement.classList.add('error');
+        }
+      }
+
+      messageElement.style.display = 'block';
+
+      setTimeout(() => {
+        messageElement.style.display = 'none';
+        messageElement.textContent = '';
+        messageElement.className = '';
+      }, 5000);
+    }
+
+    window.onload = () => {
+      toggleWhatsapp();
+      toggleCustomInput('phone', 'phone-custom-wrapper');
+      toggleCustomInput('address', 'address-custom-wrapper');
+      updateSignature();
+    };
+  </script>
+</body>
+</html>
