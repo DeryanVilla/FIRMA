@@ -400,16 +400,17 @@
       const waLink = (showWhatsapp && whatsapp) ? `https://wa.me/506${whatsapp.replace(/-/g, '')}` : '#';
 
       let signature = '';
+      const signatureFontFamily = "'Gill Sans', 'Gill Sans MT', Calibri, sans-serif"; // Definimos la pila de fuentes para la firma
 
       if (currentLogo === 'OPDN') {
         signature = `
         <table cellpadding="0" cellspacing="0" border="0" style="position:relative; width:610px; height:280px;">
             <tr>
-                <td style="position:absolute; top:0; left:0; width:100%; height:100%; z-index:0; text-align:center; vertical-align:middle;">
+                <td style="position:absolute; top:23px; left:0; width:100%; height:100%; z-index:0; text-align:center; vertical-align:middle;">
                     <img src="public/sombra.png" alt="Sombra" style="width:100%; height:auto; display:block;">
                 </td>
                 <td style="position:relative; z-index:1; padding:25px;">
-                    <table cellpadding="0" cellspacing="0" border="0" style="border-radius:10px; background-color:#ffffff; box-shadow:0 4px 8px rgba(0, 0, 0, 0.1); width:100%;">
+                    <table cellpadding="0" cellspacing="0" border="0" style="border-radius:10px; background-color:#ffffff; box-shadow:0 0px 0px rgba(0, 0, 0, 0.1); width:100%;">
                         <tr>
                             <td style="border-radius:10px;">
                                 <table cellpadding="0" cellspacing="0" border="0" style="width:600px;">
@@ -424,14 +425,14 @@
                                         <td style="width:426px; background-color:#ffffff; padding:40px 10px 0 10px; vertical-align:top;border-radius: 10px">
                                             <table cellpadding="0" cellspacing="0" border="0" style="width:100%;">
                                                 <tr>
-                                                    <td style="color:#d13339; font-size:30px; font-weight:700; line-height:32px;">${name || 'Nombre Apellido'}</td>
+                                                    <td style="font-family: ${signatureFontFamily}; color:#d13339; font-size:30px; font-weight:600; line-height:32px;">${name || 'Nombre Apellido'}</td>
                                                 </tr>
                                                 <tr>
-                                                    <td style="color:#d13339; font-size:15px; font-weight:500; line-height:16px;">${position || 'Puesto / Área'}</td>
+                                                    <td style="font-family: ${signatureFontFamily}; color:#d13339; font-size:15px; font-weight:500; line-height:16px;">${position || 'Puesto / Área'}</td>
                                                 </tr>
                                                 <tr>
                                                     <td style="padding-top:6px;">
-                                                        <table cellpadding="0" cellspacing="0" border="0" style="width:100%; font-size:11px; font-weight:500; color:#6e6d6c;">
+                                                        <table cellpadding="0" cellspacing="0" border="0" style="font-family: ${signatureFontFamily}; width:100%; font-size:12px; font-weight:500; color:#6e6d6c;">
                                                             <tr>
                                                                 <td style="padding-bottom:12px; vertical-align:middle;">
                                                                     <img src="public/correo.png" alt="Correo" style="width:10px; height:9px; vertical-align:middle; margin-right:6px;">
@@ -476,11 +477,11 @@
         signature = `
         <table cellpadding="0" cellspacing="0" border="0" style="position:relative; width:610px; height:280px;">
             <tr>
-                <td style="position:absolute; top:0; left:0; width:100%; height:100%; z-index:0; text-align:center; vertical-align:middle;">
+                <td style="position:absolute; top:23px; left:0; width:100%; height:100%; z-index:0; text-align:center; vertical-align:middle;">
                     <img src="public/sombra.png" alt="Sombra" style="width:100%; height:auto; display:block;">
                 </td>
                 <td style="position:relative; z-index:1; padding:25px;">
-                    <table cellpadding="0" cellspacing="0" border="0" style="border-radius:10px; background-color:#ffffff; box-shadow:0 4px 8px rgba(0, 0, 0, 0.1); height:192px; width:100%;">
+                    <table cellpadding="0" cellspacing="0" border="0" style="border-radius:10px; background-color:#ffffff; box-shadow:0 0px 0px rgba(0, 0, 0, 0.1); height:192px; width:100%;">
                         <tr>
                             <td style="border-radius:10px;">
                                 <table cellpadding="0" cellspacing="0" border="0" style="width:600px; height:192px;">
@@ -495,14 +496,14 @@
                                         <td style="width:426px; background-color:#ffffff; padding:0 10px; vertical-align:middle; border-radius: 15px;">
                                             <table cellpadding="0" cellspacing="0" border="0" style="width:100%;">
                                                 <tr>
-                                                    <td style="color:#d13339; font-size:30px; font-weight:700; line-height:32px;">${name || 'Nombre Apellido'}</td>
+                                                    <td style="font-family: ${signatureFontFamily}; color:#d13339; font-size:30px; font-weight:600; line-height:32px;">${name || 'Nombre Apellido'}</td>
                                                 </tr>
                                                 <tr>
-                                                    <td style="color:#d13339; font-size:15px; font-weight:500; line-height:16px;">${position || 'Puesto / Área'}</td>
+                                                    <td style="font-family: ${signatureFontFamily}; color:#d13339; font-size:15px; font-weight:500; line-height:16px;">${position || 'Puesto / Área'}</td>
                                                 </tr>
                                                 <tr>
                                                     <td style="padding-top:6px;">
-                                                        <table cellpadding="0" cellspacing="0" border="0" style="width:100%; font-size:12px; font-weight:500; color:#6e6d6c;">
+                                                        <table cellpadding="0" cellspacing="0" border="0" style="font-family: ${signatureFontFamily}; width:100%; font-size:12px; font-weight:500; color:#6e6d6c;">
                                                             <tr>
                                                                 <td style="padding-bottom:12px; vertical-align:middle;">
                                                                     <img src="public/correo.png" alt="Correo" style="width:11px; height:10px; vertical-align:middle; margin-right:6px;">
